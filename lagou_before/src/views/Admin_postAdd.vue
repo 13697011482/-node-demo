@@ -44,7 +44,16 @@
           <el-option value="博士研究生">博士研究生</el-option>
         </el-select>
       </el-form-item>
-      <el-form-item>
+        <el-form-item>
+              <el-upload
+                class="avatar-uploader"
+                action="https://jsonplaceholder.typicode.com/posts/"
+                :show-file-list="false"
+                :on-success="handleAvatarSuccess"
+                >
+                <img v-if="imageUrl" :src="imageUrl" class="avatar">
+                <i v-else class="el-icon-plus avatar-uploader-icon"></i>
+              </el-upload>
         <el-button type="primary" @click="onSubmit">添加</el-button>
       </el-form-item>
     </el-form>
@@ -63,19 +72,32 @@ export default {
         postMoney : '',
         postYear : '',
         postEdu : ''
-      }
+      },
+      imageUrl : "",
+      file : {}
     }
   },
   methods : {
+
+    handleAvatarSuccess(res, file) {
+      this.file = file.raw;  //上传的对象
+      this.imageUrl = URL.createObjectURL(file.raw);
+    },
+
     onSubmit(){
-      this.$axios.post('/api/post/add' , {
-        postName : this.form.postName,
-        postCity : this.form.postCity,
-        postCompany : this.form.postCompany,
-        postNumber : this.form.postNumber,
-        postMoney : this.form.postMoney,
-        postYear : this.form.postYear,
-        postEdu : this.form.postEdu,
+      var file = this.file;
+      var params = new FormData();
+      params.append('filename' , file);
+      params.append('postName' , this.form.postName);
+      params.append('postCity' , this.form.postCity);
+      params.append('postCompany' , this.form.postCompany);
+      params.append('postNumber' , this.form.postNumber);
+      params.append('postMoney' , this.form.postMoney);
+      params.append('postYear' , this.form.postYear);
+      params.append('postEdu' , this.form.postEdu);
+
+      this.$axios.post('/api/post/add' , params , {
+        headers : {'Content-Type': 'multipart/form-data'}
       }).then((res) => {
         if(res){
           // console.log(res.data);
@@ -94,9 +116,9 @@ export default {
             return false;
           }
         }
-      })
+        })
+      }
     }
-  }
 }
 </script>
 
@@ -112,4 +134,27 @@ export default {
 #form_add .el-form-item__content{
   text-align: left;
 }
+.avatar-uploader .el-upload {
+    border: 1px dashed #d9d9d9;
+    border-radius: 6px;
+    cursor: pointer;
+    position: relative;
+    overflow: hidden;
+  }
+  .avatar-uploader .el-upload:hover {
+    border-color: #409EFF;
+  }
+  .avatar-uploader-icon {
+    font-size: 28px;
+    color: #8c939d;
+    width: 178px;
+    height: 178px;
+    line-height: 178px;
+    text-align: center;
+  }
+  .avatar {
+    width: 178px;
+    height: 178px;
+    display: block;
+  }
 </style>

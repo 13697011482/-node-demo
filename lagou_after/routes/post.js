@@ -2,7 +2,10 @@ var express = require('express');
 var router = express.Router();
 var ControllerPost = require('../controller/post')
 
-router.post('/add' , ControllerPost.add)
+var multer = require('multer');
+var upload = multer({ dest: './public/uploads/' });
+
+router.post('/add' , upload.single('filename') , ControllerPost.add)
 router.get('/list' , ControllerPost.list)
 router.get('/find' , ControllerPost.find)
 router.post('/update' , ControllerPost.update)

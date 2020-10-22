@@ -4,7 +4,7 @@
       <el-breadcrumb-item :to="{ path: '/admin' }">首页</el-breadcrumb-item>
       <el-breadcrumb-item :to="{ path: '/admin/postEdit' }">职位管理</el-breadcrumb-item>
       <el-breadcrumb-item>职位更新</el-breadcrumb-item>
-    </el-breadcrumb>
+     </el-breadcrumb>
      <el-form id="form_add" ref="form" :model="form" label-width="80px">
       <el-form-item label="职位名称">
         <el-input v-model="form.postName"></el-input>
@@ -45,6 +45,7 @@
           <el-option value="博士研究生">博士研究生</el-option>
         </el-select>
       </el-form-item>
+      
       <el-form-item>
         <el-button type="primary" @click="onUpdate">更新</el-button>
       </el-form-item>

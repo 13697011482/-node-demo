@@ -1,13 +1,20 @@
 var PostModel = require('../model/post')
 var CountModel = require('../model/count')
+var fs = require('fs');
+var path = require('path');
 
 var add = async (req,res,next) => {
   var body = req.body
-  
+  var file = req.file
+  console.log(req.file , body);
+
+  fs.renameSync( path.join('./public/uploads' , file.filename) , path.join('./public/uploads' , file.filename + '.png') );
+
   var { postId } = await CountModel.findOneAndUpdate({}, { $inc : { postId : 1 } }, { upsert : true , new : true}); 
 
   var data = {
     ...body,
+    filename : 'http://localhost:3000/uploads/' + file.filename + '.png',
     postId
   }
 
@@ -92,6 +99,7 @@ var find = (req,res,next) => {
 var update = (req,res,next) => {
   var body = req.body
   var postId = req.query.postId
+
   PostModel.findOneAndUpdate({postId} , { $set : body }).then((info) => {
     if(info){
       res.json({
