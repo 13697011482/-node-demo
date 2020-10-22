@@ -107,9 +107,34 @@ var update = (req,res,next) => {
     })
   })
 }
+var remove = (req,res,next) => {
+  var postId = req.query.postId
+  PostModel.deleteOne({postId}).then((info) => {
+    if(info){
+      res.json({
+        code : 0,
+        errmsg : 'ok',
+        info
+      })
+    }else {
+      res.json({
+        code : -1,
+        errmsg : 'remove err',
+        info : {}
+      })
+    }
+  }).catch((err) => {
+    res.json({
+      code : -1,
+      errmsg : 'remove err',
+      info : {}
+    })
+  })
+}
 module.exports = {
   add,
   list,
   find,
-  update
+  update,
+  remove
 }
