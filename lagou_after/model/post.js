@@ -7,7 +7,8 @@ var PostSchema = mongoose.Schema({
   postMoney : {type : String , required :true},
   postYear : {type : String , required :true},
   postEdu : {type : String , required :true},
-  Date : {type : Date , default : Date.now}
+  Date : {type : Date , default : Date.now},
+  postId : {type : Number , required : true}
 })
 
 var PostModel = mongoose.model('postList' , PostSchema)
